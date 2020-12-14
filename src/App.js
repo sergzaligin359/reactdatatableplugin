@@ -8,6 +8,7 @@ function App() {
 
   const [data, setData] = useState([]);
   const [sort, setSort] = useState(true);
+  const [sortField, setSortField] = useState('id');
 
   console.log('data', data);
 
@@ -26,19 +27,21 @@ function App() {
   //   }
   //   setData(sortBy);
   // };
-  
+
   const onSort = sortField => {
     let sortBy = [];
     if(sort) {
       sortBy = [...data].sort((prev, next) => {
-        if(prev[sortField] < next[sortField]) return -1;
+        if(next[sortField] < prev[sortField]) return -1;
       })
       setSort(false);
+      setSortField(sortField);
     }else{
       sortBy = [...data].sort((prev, next) => {
-        if(next[sortField] < prev[sortField]) return -1;
+        if(prev[sortField] < next[sortField]) return -1;
       });
       setSort(true);
+      setSortField(sortField);
     }
     setData(sortBy);
   };
@@ -54,7 +57,7 @@ function App() {
   return (
     <div className="container">
        {
-         data.length > 0 ? <Table data={data} onSort={onSort} /> : <Loader />
+         data.length > 0 ? <Table data={data} onSort={onSort} sort={sort} sortField={sortField}/> : <Loader />
        }
     </div>
   );
